@@ -1,18 +1,13 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
 
-import Registration from "./Screens/RegistrationScreen";
-import Login from "./Screens/LoginScreen";
 import { useState } from "react";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
+
+
+import { NavigationContainer } from "@react-navigation/native";
+
+import { useRoute } from "./router";
 
 const fonts = () =>
   Font.loadAsync({
@@ -21,8 +16,10 @@ const fonts = () =>
     "roboto-medium": require("./assets/fonts/Roboto/Roboto-Medium.ttf"),
   });
 
+
 export default function App() {
   const [font, setFont] = useState(false);
+  const routing = useRoute({});
 
   if (!font) {
     return (
@@ -35,30 +32,8 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ImageBackground
-          style={styles.image}
-          source={require("./assets/images/bg.jpg")}
-        >
-          <Registration />
-          {/* <Login/> */}
-        </ImageBackground>
-      </TouchableWithoutFeedback>
-    </View>
+    <NavigationContainer>
+      {routing}
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    fontFamily: "roboto-regular",
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
-    // alignItems: "center",
-  },
-});
