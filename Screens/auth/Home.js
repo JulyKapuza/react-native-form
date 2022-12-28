@@ -41,6 +41,7 @@ const Home = ({navigation}) => {
   return (
     <Tabs.Navigator
       initialRouteName="Posts"
+     
       tabBarOptions={{
         showLabel: false,
         activeTintColor: "white",
@@ -69,10 +70,12 @@ const Home = ({navigation}) => {
           headerRight: () => (
             <View style={{ padding: 15 }}>
               <TouchableOpacity
-                      onPress={() => navigation.navigate("Login", {
-                          sessionId: 45,
-                          userId: "22e24"
-                      })}
+                onPress={() =>
+                  navigation.navigate("Login", {
+                    sessionId: 45,
+                    userId: "22e24",
+                  })
+                }
               >
                 <MaterialIcons name="logout" size={28} color="#BDBDBD" />
               </TouchableOpacity>
@@ -94,9 +97,7 @@ const Home = ({navigation}) => {
           },
           headerLeft: () => (
             <View style={{ padding: 15 }}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Posts")}
-              >
+              <TouchableOpacity onPress={() => navigation.navigate("Posts")}>
                 <Ionicons name="arrow-back-outline" size={28} color="#BDBDBD" />
               </TouchableOpacity>
             </View>
