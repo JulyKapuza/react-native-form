@@ -22,8 +22,8 @@ const initialState = {
 };
 
 export default function Login({ navigation, route }) {
-  const { userId } = route.params;
-  console.log("navigation", navigation);
+  // const { userId } = route.params;
+  // console.log("navigation", navigation);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
 

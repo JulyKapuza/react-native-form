@@ -1,92 +1,47 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-
+import { createStackNavigator } from "@react-navigation/stack";
+const Stack = createStackNavigator();
 //icons import
-import { MaterialIcons } from "@expo/vector-icons";
+
 import { Ionicons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons"; 
+import { Feather } from "@expo/vector-icons";
 
 import CreatePostsScreen from "../mainScreen/CreatePostsScreen";
-
-function Create() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <CreatePostsScreen/>
-    </View>
-  );
-}
-
-function Profile() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Profile</Text>
-    </View>
-  );
-}
-
-function Posts() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Posts</Text>
-    </View>
-  );
-}
+import PostsScreen from "../mainScreen/PostsScreen";
+import ProfileScreen from "../mainScreen/ProfileScreen";
 
 
 const Tabs = createBottomTabNavigator();
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   return (
     <Tabs.Navigator
       initialRouteName="Posts"
-     
-      tabBarOptions={{
-        showLabel: false,
-        activeTintColor: "white",
-        inactiveTintColor: "gray",
-        activeBackgroundColor: "#FF6C00",
+      screenOptions={{
+        tabBarStyle: { display: "flex" },
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "gray",
+        tabBarActiveBackgroundColor: "#FF6C00",
+        tabBarShowLabel: false,
       }}
     >
       <Tabs.Screen
         name="Posts"
-        component={Posts}
+        component={PostsScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused, size, color }) => (
             <Ionicons name="ios-grid-outline" size={size} color={color} />
-          ),
-          title: "Публікації",
-          headerStyle: {
-            // backgroundColor: "#f4511e",
-            height: 110,
-            borderBottomWidth: 2,
-          },
-          headerTintColor: "#212121",
-          headerTitleStyle: {
-            fontWeight: "bold",
-            fontSize: 20,
-          },
-          headerRight: () => (
-            <View style={{ padding: 15 }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Login", {
-                    sessionId: 45,
-                    userId: "22e24",
-                  })
-                }
-              >
-                <MaterialIcons name="logout" size={28} color="#BDBDBD" />
-              </TouchableOpacity>
-            </View>
           ),
         }}
       />
       <Tabs.Screen
         name="Create"
-        component={Create}
+        component={CreatePostsScreen}
         options={{
+          tabBarStyle: { display: "none" },
           tabBarIcon: ({ focused, size, color }) => (
             <Ionicons name="ios-add" size={size} color={color} />
           ),
@@ -106,7 +61,7 @@ const Home = ({navigation}) => {
       />
       <Tabs.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused, size, color }) => (
             <Feather name="user" size={size} color={color} />
