@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -9,25 +10,28 @@ import {
   TextInput,
 } from "react-native";
 import { Camera } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
+
 import * as Location from "expo-location";
+
+import db from "../../firebase/config";
 
 import { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons"; 
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
   const [camera, setCamera] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
-  
+
   // const [type, setType] = useState(Camera.Constants.Type.back);
   const [imageUri, setImageUri] = useState(null);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [place, setPlace] = useState("");
-  const [location, setLocation] = useState('');
-  
+  const [location, setLocation] = useState("");
+
+  const {userId, login } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -38,18 +42,19 @@ const CreatePostsScreen = () => {
     })();
   }, []);
 
-   useEffect(() => {
-     (async () => {
-       let { status } = await Location.requestForegroundPermissionsAsync();
-       if (status !== "granted") {
-         setErrorMsg("Permission to access location was denied");
-         return;
-       }
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
 
-       let location = await Location.getCurrentPositionAsync({});
-       setLocation(location);
-     })();
-   }, []);
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      
+    })();
+  }, []);
 
   if (hasPermission === null) {
     return <View />;
@@ -58,28 +63,50 @@ const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
-
   const takePicture = async () => {
-    if (camera) {
-      const data = await camera.takePictureAsync(null);
-      console.log(data.uri);
-      const location = await Location.getCurrentPositionAsync({});
-      console.log("location", location);
-       setLocation(location);
-      setImageUri(data.uri);
-    }
-     
+
+    const imageUri = await camera.takePictureAsync();
+    console.log(imageUri.uri);
+    setImageUri(imageUri.uri);
   };
 
   const sentPicture = () => {
-    console.log("navigation", navigation);
-    navigation.navigate("Posts", {
-      screen: "DefaultScreen",
-      params: { photo: imageUri, name:name, place:place },
-    });
+    uploadPostToServer()
+    navigation.navigate("Home");
     setImageUri(null);
     setName("");
-     setPlace("");
+    setPlace("");
+  };
+
+   const uploadPostToServer = async () => {
+     try {
+       const uploadedPhoto = await uploadPhotoToServer();
+       const createPost = await db.firestore().collection("posts").add({
+         photo: uploadedPhoto,
+         name,
+         place,
+         location,
+         userId,
+         login,
+       });
+     } catch (error) {
+       console.log(error);
+     }
+   };
+
+
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(imageUri);
+    const file = await response.blob();
+    const uniquePostId = Date.now().toString();
+    await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+    const processedPhoto = await db
+      .storage()
+      .ref(`postImage`)
+      .child(uniquePostId)
+      .getDownloadURL();
+    console.log("processedPhoto", processedPhoto);
+    return processedPhoto;
   };
 
   const resetData = () => {

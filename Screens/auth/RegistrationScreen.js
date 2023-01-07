@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
+  Image,
   StyleSheet,
   TextInput,
+  ImageViewer,
   View,
   Text,
   secureTextEntry,
@@ -14,37 +16,60 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
+import { AntDesign } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons"; 
+
+
+import { authSignUp } from "../../redux/auth/authOperation";
 
 const initialState = {
   login: "",
   email: "",
   password: "",
+  avatar: "",
 };
 
 export default function Registration({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [state, setstate] = useState(initialState);
+  const [state, setState] = useState(initialState);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    setState((prevState) => ({
+      ...prevState,
+      avatar: result.assets[0].uri,
+    }));
+  };
+
+  const dispatch = useDispatch();
 
   const [dimensions, setdimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
 
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width - 16 * 2;
-      setdimensions(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const onChange = () => {
+  //     const width = Dimensions.get("window").width - 16 * 2;
+  //     setdimensions(width);
+  //   };
+  //   Dimensions.addEventListener("change", onChange);
+  //   return () => {
+  //     Dimensions.removeEventListener("change", onChange);
+  //   };
+  // }, []);
 
-  const keyboardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
-    setstate(initialState);
+    dispatch(authSignUp(state));
+    setState(initialState);
   };
   return (
     <View style={styles.container}>
@@ -62,6 +87,24 @@ export default function Registration({ navigation }) {
                 paddingBottom: isShowKeyboard ? 10 : 60,
               }}
             >
+              <View style={styles.avatarWrap}>
+                <TouchableOpacity style={styles.wrapIcon} onPress={pickImage}>
+                  {state.avatar ? (
+                    <AntDesign name="closecircleo" size={24} color="#BDBDBD" />
+                    
+                  ) : (
+                    <AntDesign name="plus" size={24} color="#FF6C00" />
+                  )}
+                </TouchableOpacity>
+                {state.avatar ? (
+                  <Image source={{ uri: state.avatar }} style={styles.avatar} />
+                ) : (
+                  <Image
+                    source={require("../../assets/images/avatar.jpg")}
+                    style={styles.avatar}
+                  />
+                )}
+              </View>
               <Text style={styles.title}>Реєстрація</Text>
               <View
                 style={{
@@ -76,7 +119,7 @@ export default function Registration({ navigation }) {
                   onFocus={() => setIsShowKeyboard(true)}
                   value={state.login}
                   onChangeText={(value) =>
-                    setstate((prevState) => ({ ...prevState, login: value }))
+                    setState((prevState) => ({ ...prevState, login: value }))
                   }
                 />
               </View>
@@ -88,7 +131,7 @@ export default function Registration({ navigation }) {
                   onFocus={() => setIsShowKeyboard(true)}
                   value={state.email}
                   onChangeText={(value) =>
-                    setstate((prevState) => ({ ...prevState, email: value }))
+                    setState((prevState) => ({ ...prevState, email: value }))
                   }
                 />
               </View>
@@ -101,7 +144,7 @@ export default function Registration({ navigation }) {
                   onFocus={() => setIsShowKeyboard(true)}
                   value={state.password}
                   onChangeText={(value) =>
-                    setstate((prevState) => ({ ...prevState, password: value }))
+                    setState((prevState) => ({ ...prevState, password: value }))
                   }
                 />
               </View>
@@ -109,13 +152,13 @@ export default function Registration({ navigation }) {
                 <TouchableOpacity
                   activeOpacity={0.8}
                   style={{ ...styles.button, width: dimensions }}
-                  // onPress={keyboardHide}
-                  onPress={() => {
-                    navigation.navigate("Home");
-                    {
-                      keyboardHide;
-                    }
-                  }}
+                  onPress={handleSubmit}
+                  // onPress={() => {
+                  //   navigation.navigate("Home");
+                  //   {
+                  //     handleSubmit;
+                  //   }
+                  // }}
                 >
                   <Text style={styles.btnTitle}>Зареєструватися</Text>
                 </TouchableOpacity>
@@ -130,7 +173,7 @@ export default function Registration({ navigation }) {
                 }
               >
                 <Text style={{ color: "#1B4371", fontSize: 16 }}>
-                  Уже є акаунт? Увійти{" "}
+                  Уже є акаунт? Увійти
                 </Text>
               </TouchableOpacity>
             </View>
@@ -152,6 +195,29 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "flex-end",
     // alignItems: "center",
+  },
+  wrapIcon: {
+    backgroundColor: "#fff",
+    borderRadius:50,
+    position: "absolute",
+    zIndex: 2,
+    bottom: 10,
+    right: -10,
+  },
+  avatarWrap: {
+    position: "absolute",
+    top: -50,
+    left: 170,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 50,
+    borderRadius: 20,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 20,
   },
   form: {
     backgroundColor: "#ecf0f1",

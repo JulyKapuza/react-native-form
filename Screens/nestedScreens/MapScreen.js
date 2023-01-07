@@ -4,26 +4,26 @@ import MapView, { Marker } from "react-native-maps";
 
 
 
-const MapScreen = () => {
-  
+const MapScreen = ({ navigation, route }) => {
+  console.log("route======>", route.params.location )
+  const { latitude, longitude } = route.params.location.coords;
   return (
     <View style={styles.container}>
       <MapView
         style={styles.mapStyle}
         region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
+          latitude: latitude,
+          longitude: longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
         mapType="standard"
         minZoomLevel={15}
-        // onMapReady={() => console.log("Map is ready")}
-        // onRegionChange={() => console.log("Region change")}
+       
       >
         <Marker
           title="It was here"
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+          coordinate={{ latitude: latitude, longitude:longitude  }}
           description="Hello"
         />
       </MapView>

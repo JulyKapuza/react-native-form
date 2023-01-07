@@ -13,8 +13,11 @@ import {
    ImageBackground,
   
   Dimensions,
-  Button,
+  
 } from "react-native";
+
+import { useDispatch } from "react-redux";
+import { authSignIn } from "../../redux/auth/authOperation";
 
 const initialState = {
   email: "",
@@ -22,10 +25,9 @@ const initialState = {
 };
 
 export default function Login({ navigation, route }) {
-  // const { userId } = route.params;
-  // console.log("navigation", navigation);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
+  const dispatch = useDispatch();
 
   const [dimensions, setdimensions] = useState(
     Dimensions.get("window").width - 16 * 2
@@ -42,10 +44,11 @@ export default function Login({ navigation, route }) {
     };
   }, []);
 
-  const keyboardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     console.log(state);
+    dispatch(authSignIn(state));
     setstate(initialState);
     
   };
@@ -105,13 +108,7 @@ export default function Login({ navigation, route }) {
                 <TouchableOpacity
                   activeOpacity={0.8}
                   style={{ ...styles.button, width: dimensions }}
-                  // onPress={keyboardHide}
-                  onPress={() => {
-                    navigation.navigate("Home");
-                    {
-                      keyboardHide;
-                    }
-                  }}
+                  onPress={handleSubmit}
                 >
                   <Text style={styles.btnTitle}>Вхід</Text>
                 </TouchableOpacity>

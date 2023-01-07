@@ -1,5 +1,6 @@
 {
   "expo": {
+    "plugins": ["expo-image-picker"],
     "name": "react-native-demo",
     "slug": "react-native-demo",
     "version": "1.0.0",
