@@ -10,10 +10,8 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-   ImageBackground,
-  
+  ImageBackground,
   Dimensions,
-  
 } from "react-native";
 
 import { useDispatch } from "react-redux";
@@ -50,7 +48,6 @@ export default function Login({ navigation, route }) {
     console.log(state);
     dispatch(authSignIn(state));
     setstate(initialState);
-    
   };
   return (
     <View style={styles.container}>
@@ -189,5 +186,3 @@ const styles = StyleSheet.create({
     color: "#1B4371",
   },
 });
-
-

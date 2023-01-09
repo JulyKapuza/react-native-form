@@ -25,18 +25,16 @@ const CreatePostsScreen = () => {
   const [camera, setCamera] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
 
-  // const [type, setType] = useState(Camera.Constants.Type.back);
   const [imageUri, setImageUri] = useState(null);
   const [name, setName] = useState("");
   const [place, setPlace] = useState("");
   const [location, setLocation] = useState("");
 
-  const {userId, login } = useSelector((state) => state.auth);
+  const { userId, login } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      // await MediaLibrary.requestPermissionsAsync();
 
       setHasPermission(status === "granted");
     })();
@@ -52,7 +50,6 @@ const CreatePostsScreen = () => {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      
     })();
   }, []);
 
@@ -64,36 +61,34 @@ const CreatePostsScreen = () => {
   }
 
   const takePicture = async () => {
-
     const imageUri = await camera.takePictureAsync();
     console.log(imageUri.uri);
     setImageUri(imageUri.uri);
   };
 
   const sentPicture = () => {
-    uploadPostToServer()
+    uploadPostToServer();
     navigation.navigate("Home");
     setImageUri(null);
     setName("");
     setPlace("");
   };
 
-   const uploadPostToServer = async () => {
-     try {
-       const uploadedPhoto = await uploadPhotoToServer();
-       const createPost = await db.firestore().collection("posts").add({
-         photo: uploadedPhoto,
-         name,
-         place,
-         location,
-         userId,
-         login,
-       });
-     } catch (error) {
-       console.log(error);
-     }
-   };
-
+  const uploadPostToServer = async () => {
+    try {
+      const uploadedPhoto = await uploadPhotoToServer();
+      const createPost = await db.firestore().collection("posts").add({
+        photo: uploadedPhoto,
+        name,
+        place,
+        location,
+        userId,
+        login,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const uploadPhotoToServer = async () => {
     const response = await fetch(imageUri);

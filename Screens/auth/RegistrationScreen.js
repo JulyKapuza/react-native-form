@@ -19,8 +19,7 @@ import {
 import { useDispatch } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { AntDesign } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons"; 
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { authSignUp } from "../../redux/auth/authOperation";
 
@@ -54,16 +53,16 @@ export default function Registration({ navigation }) {
     Dimensions.get("window").width - 16 * 2
   );
 
-  // useEffect(() => {
-  //   const onChange = () => {
-  //     const width = Dimensions.get("window").width - 16 * 2;
-  //     setdimensions(width);
-  //   };
-  //   Dimensions.addEventListener("change", onChange);
-  //   return () => {
-  //     Dimensions.removeEventListener("change", onChange);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width - 16 * 2;
+      setdimensions(width);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const handleSubmit = () => {
     setIsShowKeyboard(false);
@@ -91,7 +90,6 @@ export default function Registration({ navigation }) {
                 <TouchableOpacity style={styles.wrapIcon} onPress={pickImage}>
                   {state.avatar ? (
                     <AntDesign name="closecircleo" size={24} color="#BDBDBD" />
-                    
                   ) : (
                     <AntDesign name="plus" size={24} color="#FF6C00" />
                   )}
@@ -198,7 +196,7 @@ const styles = StyleSheet.create({
   },
   wrapIcon: {
     backgroundColor: "#fff",
-    borderRadius:50,
+    borderRadius: 50,
     position: "absolute",
     zIndex: 2,
     bottom: 10,

@@ -25,31 +25,27 @@ const CommentsScreen = ({ route }) => {
   const [allComments, setAllComments] = useState(null);
   const { login, avatar } = useSelector((state) => state.auth);
 
-
-
-  useEffect(() => { getAllPosts() },[])
+  useEffect(() => {
+    getAllPosts();
+  }, []);
 
   const createPost = async () => {
-
- setComment("");
-     db.firestore()
-       .collection("posts")
-       .doc(postId)
-       .collection("comments")
-      .add({ comment, login, });
-    
-   
-    
+    setComment("");
+    db.firestore()
+      .collection("posts")
+      .doc(postId)
+      .collection("comments")
+      .add({ comment, login });
   };
 
-  const getAllPosts =async()=>{
- db.firestore()
-   .collection("posts")
-   .doc(postId)
-   .collection("comments")
-   .onSnapshot((data) =>
-     setAllComments(data.docs.map((doc) => ({ ...doc.data(), id:doc.id })))
-   );
+  const getAllPosts = async () => {
+    db.firestore()
+      .collection("posts")
+      .doc(postId)
+      .collection("comments")
+      .onSnapshot((data) =>
+        setAllComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
   };
 
   return (

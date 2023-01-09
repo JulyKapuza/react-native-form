@@ -1,12 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
-
-
 const MapScreen = ({ navigation, route }) => {
-  console.log("route======>", route.params.location )
+  console.log("route======>", route.params.location);
   const { latitude, longitude } = route.params.location.coords;
+  console.log("Location======>", route.params.location.coords);
   return (
     <View style={styles.container}>
       <MapView
@@ -19,11 +18,10 @@ const MapScreen = ({ navigation, route }) => {
         }}
         mapType="standard"
         minZoomLevel={15}
-       
       >
         <Marker
           title="It was here"
-          coordinate={{ latitude: latitude, longitude:longitude  }}
+          coordinate={{ latitude: latitude, longitude: longitude }}
           description="Hello"
         />
       </MapView>

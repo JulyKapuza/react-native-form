@@ -3,7 +3,8 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import db from "../../firebase/config";
 import { authSlice } from "./authReducer";
 
-const { updateUserProfile, authStateChange, authSignOutUser } = authSlice.actions;
+const { updateUserProfile, authStateChange, authSignOutUser } =
+  authSlice.actions;
 /* -------------------------------------------------------------------------- */
 /*                       Функція реєстарції користувача                       */
 /* -------------------------------------------------------------------------- */
@@ -11,7 +12,7 @@ export const authSignUp =
   ({ login, password, email, avatar }) =>
   async (dispatch, getState) => {
     try {
-      await db.auth().createUserWithEmailAndPassword(email, password,);
+      await db.auth().createUserWithEmailAndPassword(email, password);
 
       const user = await db.auth().currentUser;
 
@@ -41,8 +42,8 @@ export const authSignIn =
     try {
       await db.auth().signInWithEmailAndPassword(email, password);
       const user = await db.auth().currentUser;
-      
-        console.log("user", user);
+
+      console.log("user", user);
     } catch (error) {
       console.log("error", error.message);
     }
@@ -62,16 +63,13 @@ export const authSignOut = () => async (dispatch, getState) => {
 export const authStateChangeUser = () => async (dispatch, getState) => {
   await db.auth().onAuthStateChanged((user) => {
     if (user) {
-      
       const userUpdateProfile = {
         userId: user.uid,
         login: user.displayName,
         avatar: user.photoURL,
-        
       };
-        dispatch(authStateChange({ stateChange: true }));
+      dispatch(authStateChange({ stateChange: true }));
       dispatch(updateUserProfile(userUpdateProfile));
-    
-   } 
- });
+    }
+  });
 };

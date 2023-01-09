@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 
 const Home = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
- const { userId, login, avatar } = useSelector((state) => state.auth);
+  const { userId, login, avatar } = useSelector((state) => state.auth);
   const getAllPost = async () => {
     await db
       .firestore()
@@ -47,9 +47,11 @@ const Home = ({ route, navigation }) => {
             <View style={styles.wrapIcon}>
               <TouchableOpacity
                 activeOpacity={0.8}
-                // style={styles.wrap}
                 onPress={() =>
-                  navigation.navigate("Comment", { postId: item.id, photo:item.photo,  })
+                  navigation.navigate("Comment", {
+                    postId: item.id,
+                    photo: item.photo,
+                  })
                 }
               >
                 <FontAwesome5
@@ -99,7 +101,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   wrap: {
-   
     marginBottom: 32,
   },
   avatarWrap: {
@@ -158,103 +159,3 @@ const styles = StyleSheet.create({
 });
 export default Home;
 
-// import React from "react";
-// import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { createStackNavigator } from "@react-navigation/stack";
-// const Stack = createStackNavigator();
-// //icons import
-
-// import { Ionicons } from "@expo/vector-icons";
-// import { Feather } from "@expo/vector-icons";
-// import { MaterialIcons } from "@expo/vector-icons";
-
-// import CreatePostsScreen from "./CreatePostsScreen";
-// import PostsScreen from "./PostsScreen";
-// import ProfileScreen from "./ProfileScreen";
-
-// const Tabs = createBottomTabNavigator();
-
-// const Home = ({ navigation }) => {
-//   return (
-//     <Tabs.Navigator
-//       initialRouteName="Posts"
-//       screenOptions={{
-//         tabBarStyle: { display: "flex" },
-//         tabBarActiveTintColor: "white",
-//         tabBarInactiveTintColor: "gray",
-//         tabBarActiveBackgroundColor: "#FF6C00",
-//         tabBarShowLabel: false,
-//       }}
-//     >
-//       <Tabs.Screen
-//         name="Posts"
-//         component={PostsScreen}
-//         options={{
-//           // headerShown: false,
-//           tabBarIcon: ({ focused, size, color }) => (
-//             <Ionicons name="ios-grid-outline" size={size} color={color} />
-//           ),
-//           title: "Публікації",
-//           headerStyle: {
-//             height: 110,
-//             borderBottomWidth: 2,
-//           },
-//           headerTintColor: "#212121",
-//           headerTitleStyle: {
-//             fontWeight: "bold",
-//             fontSize: 20,
-//           },
-//           headerRight: () => (
-//             <View style={{ padding: 15 }}>
-//               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-//                 <MaterialIcons name="logout" size={28} color="#BDBDBD" />
-//               </TouchableOpacity>
-//             </View>
-//           ),
-//         }}
-//       />
-//       <Tabs.Screen
-//         name="Create"
-//         component={CreatePostsScreen}
-//         options={{
-//           tabBarStyle: { display: "none" },
-//           tabBarIcon: ({ focused, size, color }) => (
-//             <Ionicons name="ios-add" size={size} color={color} />
-//           ),
-//           title: "Створити публікацію",
-//           headerStyle: {
-//             height: 110,
-//             borderBottomWidth: 2,
-//           },
-//           headerLeft: () => (
-//             <View style={{ padding: 15 }}>
-//               <TouchableOpacity onPress={() => navigation.navigate("Posts")}>
-//                 <Ionicons name="arrow-back-outline" size={28} color="#BDBDBD" />
-//               </TouchableOpacity>
-//             </View>
-//           ),
-//         }}
-//       />
-//       <Tabs.Screen
-//         name="Profile"
-//         component={ProfileScreen}
-//         options={{
-//           tabBarIcon: ({ focused, size, color }) => (
-//             <Feather name="user" size={size} color={color} />
-//           ),
-//         }}
-//       />
-//     </Tabs.Navigator>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
-
-// export default Home;

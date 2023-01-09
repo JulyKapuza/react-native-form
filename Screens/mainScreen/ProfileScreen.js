@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,16 +10,15 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import db from '../../firebase/config'
+import db from "../../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { authSignOut } from "../../redux/auth/authOperation";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-
-const ProfileScreen = ({navigation}) => {
-const dispatch = useDispatch();
+const ProfileScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [userPosts, setUserPosts] = useState([]);
   const { userId, login, avatar } = useSelector((state) => state.auth);
 
@@ -32,12 +31,13 @@ const dispatch = useDispatch();
         setUserPosts(data.docs.map((doc) => ({ ...doc.data() })))
       );
   };
-  useEffect(() => {getUserPost() }, []);
-  
+  useEffect(() => {
+    getUserPost();
+  }, []);
 
   const signOut = () => {
     dispatch(authSignOut());
-  }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -49,11 +49,7 @@ const dispatch = useDispatch();
             <MaterialIcons name="logout" size={28} color="#BDBDBD" />
           </TouchableOpacity>
           <View style={styles.avatarWrap}>
-            <Image
-              source={{ uri: avatar }}
-              style={styles.avatar}
-
-            />
+            <Image source={{ uri: avatar }} style={styles.avatar} />
           </View>
           <Text style={styles.title}>{login}</Text>
 
@@ -63,7 +59,6 @@ const dispatch = useDispatch();
               <View style={styles.wrap}>
                 <View style={styles.wrapImage}>
                   <Image source={{ uri: item.photo }} style={styles.picture} />
-                  
                 </View>
                 <Text style={styles.text}>{item.name}</Text>
                 <View style={styles.wrapIcon}>
@@ -115,14 +110,6 @@ const dispatch = useDispatch();
     </SafeAreaView>
   );
 };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-// });
 
 
 const styles = StyleSheet.create({
